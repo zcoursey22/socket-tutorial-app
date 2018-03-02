@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Helvetica, Arial;
+        font-size: 1.5vw;
+      }
+
+      form {
+        background: #111;
+        padding: 0.25vw;
+        position: fixed;
+        bottom: 0;
+        width: 100vw;
+      }
+
+      form input {
+        border: 0;
+        padding: 0.5vw;
+        width: 93vw;
+        margin-right: 0.25vw;
+        font-size: 1.5vw;
+      }
+
+      form button {
+        width: 6.25vw;
+        background: rgb(130, 255, 130);
+        border: none;
+        padding: 0.5vw;
+        font-size: 1.5vw;
+        font-weight: bold;
+      }
+
+      #messages {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        height: 93.35vh;
+        overflow-y: scroll;
+      }
+
+      #messages li {
+        padding: 0.25vw 0.5vw;
+      }
+
+      #messages li:nth-child(odd) {
+        background: #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+
+
+    <!-- socket.io call -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- jQuery call -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- client-side script -->
+    <script>
+      $(document).ready(function () {
+        var socket = io();
+
+        $('form').submit(function(){
+          socket.emit('chat message', $('#m').val());
+          $('#m').val('');
+          return false;
+        });
+
+        socket.on('chat message', function(msg){
+          $('#messages').append($('<li>').text(msg));
+          $("#messages").scrollTop($("#messages")[0].scrollHeight);
+        });
+      });
+    </script>
+
+
+  </body>
+</html>
